@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}My Profile{% endblock %}
+{% block content %}
+<div class="card shadow-sm col-md-6"><div class="card-body">
+  <h3>My Profile</h3>
+  <p class="mb-1"><b>Username:</b> {{ user.username }}</p>
+  <p class="mb-1"><b>Email:</b> {{ user.email|default:"-" }}</p>
+  <p class="mb-3"><b>Joined:</b> {{ user.date_joined|date:"d M Y" }}</p>
+  <h5>Adoption requests ({{ total }})</h5>
+  <ul>{% for s, c in stats.items %}<li>{{ s }}: {{ c }}</li>{% endfor %}</ul>
+  <a href="{% url 'my_requests' %}" class="btn btn-success">View my requests</a>
+</div></div>
+{% endblock %}

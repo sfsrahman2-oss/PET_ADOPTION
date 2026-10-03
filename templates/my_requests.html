@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}My Adoption Requests{% endblock %}
+{% block content %}
+<h2 class="mb-3">My Adoption Requests</h2>
+{% if requests %}
+<div class="table-responsive"><table class="table table-striped bg-white align-middle">
+  <thead><tr><th>Pet</th><th>Date</th><th>Status</th></tr></thead>
+  <tbody>
+  {% for r in requests %}
+  <tr>
+    <td><a href="{{ r.pet.get_absolute_url }}">{{ r.pet.name }}</a></td>
+    <td>{{ r.created_at|date:"d M" }}</td>
+    <td><span class="badge {% if r.status == 'Approved' %}bg-success{% elif r.status == 'Rejected' %}bg-danger{% else %}bg-warning text-dark{% endif %}">{{ r.status }}</span></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% else %}
+<p class="text-muted">You haven't applied for any pets yet. <a href="{% url 'pet_list' %}">Browse pets</a></p>
+{% endif %}
+{% endblock %}

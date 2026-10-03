@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{{ pet.name }}{% endblock %}
+{% block content %}
+<div class="card shadow-sm"><div class="row g-0">
+  <div class="col-md-5">
+    {% if pet.image %}<img src="{{ pet.image.url }}" class="img-fluid rounded-start w-100" alt="{{ pet.name }}">
+    {% else %}<div class="bg-secondary-subtle d-flex align-items-center justify-content-center h-100" style="min-height:260px;font-size:6rem">🐾</div>{% endif %}
+  </div>
+  <div class="col-md-7"><div class="card-body">
+    <h2>{{ pet.name }}</h2>
+    <p class="mb-1"><b>Type:</b> {{ pet.animal_type }}</p>
+    <p class="mb-1"><b>Breed:</b> {{ pet.breed|default:"-" }}</p>
+    <p class="mb-1"><b>Age:</b> {{ pet.age }} year{{ pet.age|pluralize }}</p>
+    <p class="mb-1"><b>Gender:</b> {{ pet.gender }}</p>
+    <p class="mb-3"><b>Location:</b> {{ pet.location }}</p>
+    <h5>About {{ pet.name }}</h5>
+    <p>{{ pet.description|default:"No description provided."|linebreaksbr }}</p>
+    <p><b>Status:</b> <span class="badge {% if pet.is_available %}bg-success{% else %}bg-secondary{% endif %}">{{ pet.status }}</span></p>
+
+    {% if not pet.is_available %}
+      <div class="alert alert-danger mb-0">❌ This pet has already been adopted.</div>
+    {% elif has_active %}
+      <div class="alert alert-info mb-0">You already applied for this pet. <a href="{% url 'my_requests' %}">View my requests</a></div>
+    {% elif user.is_authenticated %}
+      <a class="btn btn-success btn-lg" href="{% url 'adopt' pet.pk %}">Apply for Adoption</a>
+    {% else %}
+      <a class="btn btn-success btn-lg" href="{% url 'login' %}?next={% url 'adopt' pet.pk %}">Login to apply</a>
+    {% endif %}
+  </div></div>
+</div></div>
+<a href="{% url 'pet_list' %}" class="d-inline-block mt-3">&larr; Back to all pets</a>
+{% endblock %}

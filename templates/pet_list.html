@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Browse Pets{% endblock %}
+{% block content %}
+<h2 class="mb-3">Browse Pets</h2>
+<form method="get" class="card card-body mb-4 shadow-sm">
+  <div class="row g-2">
+    <div class="col-12 col-md-4"><input class="form-control" name="name" placeholder="Pet name" value="{{ f.name }}"></div>
+    <div class="col-6 col-md-4">
+      <select class="form-select" name="animal_type"><option value="">All types</option>
+        {% for v, l in animal_types %}<option value="{{ v }}" {% if f.animal_type == v %}selected{% endif %}>{{ l }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-6 col-md-4"><input class="form-control" name="breed" placeholder="Breed" value="{{ f.breed }}"></div>
+    <div class="col-6 col-md-3">
+      <select class="form-select" name="gender"><option value="">Any gender</option>
+        {% for v, l in genders %}<option value="{{ v }}" {% if f.gender == v %}selected{% endif %}>{{ l }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-6 col-md-3"><input class="form-control" name="location" placeholder="Location" value="{{ f.location }}"></div>
+    <div class="col-6 col-md-3">
+      <select class="form-select" name="status"><option value="">Any status</option>
+        {% for v, l in statuses %}<option value="{{ v }}" {% if f.status == v %}selected{% endif %}>{{ l }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-6 col-md-3 d-flex gap-2">
+      <button class="btn btn-success flex-fill">Search</button>
+      <a href="{% url 'pet_list' %}" class="btn btn-outline-secondary">Reset</a>
+    </div>
+  </div>
+</form>
+
+<div class="row g-3">
+  {% for pet in page_obj %}{% include "_pet_card.html" %}
+  {% empty %}<p class="text-muted">No pets match your search.</p>{% endfor %}
+</div>
+
+{% if page_obj.paginator.num_pages > 1 %}
+<nav class="mt-4"><ul class="pagination justify-content-center flex-wrap">
+  {% if page_obj.has_previous %}
+  <li class="page-item"><a class="page-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.previous_page_number }}">Previous</a></li>
+  {% endif %}
+  {% for n in page_obj.paginator.page_range %}
+  <li class="page-item {% if n == page_obj.number %}active{% endif %}"><a class="page-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ n }}">{{ n }}</a></li>
+  {% endfor %}
+  {% if page_obj.has_next %}
+  <li class="page-item"><a class="page-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.next_page_number }}">Next</a></li>
+  {% endif %}
+</ul></nav>
+{% endif %}
+{% endblock %}

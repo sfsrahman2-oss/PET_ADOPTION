@@ -1,0 +1,22 @@
+<div class="col-12 col-sm-6 col-lg-4">
+  <div class="card h-100 shadow-sm">
+    {% if pet.image %}
+      <img src="{{ pet.image.url }}" class="card-img-top" alt="{{ pet.name }}" style="height:200px;object-fit:cover">
+    {% else %}
+      <div class="bg-secondary-subtle d-flex align-items-center justify-content-center" style="height:200px;font-size:4rem">🐾</div>
+    {% endif %}
+    <div class="card-body">
+      <h5 class="card-title">{{ pet.name }}
+        <span class="badge {% if pet.is_available %}bg-success{% else %}bg-secondary{% endif %} float-end">{{ pet.status }}</span>
+      </h5>
+      <p class="card-text mb-1">Type: {{ pet.animal_type }}</p>
+      <p class="card-text mb-1">Breed: {{ pet.breed|default:"-" }}</p>
+      <p class="card-text mb-1">Age: {{ pet.age }} year{{ pet.age|pluralize }}</p>
+      <p class="card-text mb-1">Gender: {{ pet.gender }}</p>
+      <p class="card-text">Location: {{ pet.location }}</p>
+    </div>
+    <div class="card-footer bg-white border-0">
+      <a href="{{ pet.get_absolute_url }}" class="btn btn-outline-success w-100">View details</a>
+    </div>
+  </div>
+</div>
